@@ -1,5 +1,3 @@
-import java.awt.event.KeyEvent
-import kotlin.coroutines.ContinuationInterceptor
 import kotlin.random.Random
 
 fun main(args: Array<String>) {
@@ -10,7 +8,11 @@ fun main(args: Array<String>) {
     print("Enter player race (dwarf, gnome, human, or elf): ")
     val race = readLine()!!.capitalize()
 
-    val champion = Player(name = playerName, race = race)
+    val champion = Player(name = playerName, race = race, chosenClass = "")
+
+    println("Choose your class from: ")
+    champion.availableClasses.forEach { println(it) }
+    champion.chosenClass = readLine()!!.capitalize()
 
     print("Enter enemy name: ")
     val enemyName = readLine()!!.capitalize()
@@ -18,7 +20,16 @@ fun main(args: Array<String>) {
     print("Enter enemy race (orc, goblin, human, or dark elf): ")
     val enemyRace = readLine()!!.capitalize()
 
-    val enemy = Player(name = enemyName, race = enemyRace)
+    val enemy = Player(name = enemyName, race = enemyRace, chosenClass = "")
+
+    println("Choose your class from: ")
+    enemy.availableClasses.forEach { println(it) }
+    enemy.chosenClass = readLine()!!.capitalize()
+
+    fun castFireball(numFireballs: Int = 2) =
+        println("A glass of Fireball springs into existence. (x$numFireballs)")
+
+    castFireball(4)
 
     fun damageAssessment(champion: Player, enemy: Player, championStrength: Int, enemyStrength: Int): String {
         if (champion.isImmortal) {
@@ -47,18 +58,21 @@ fun main(args: Array<String>) {
             champion.health -= champDamage
             enemy.health -= championStrength
 
-            return "${champion.name} health: ${champion.health}\n" +
-                    "${enemy.name} health: ${enemy.health}\n"
+            return "${champion.name} received $champDamage damage. Health: ${champion.health}\n" +
+                    "${enemy.name} received $championStrength damage. Health: ${enemy.health}\n"
         }
     }
 
     println("Press enter to begin battle, q to quit: ")
     var battleInput = readLine()!!
 
-    while (battleInput != "q" && (champion.health > 0 || enemy.health > 0)) {
-        println(damageAssessment(champion, enemy, champion.dealDamage(), enemy.dealDamage()))
-        println("Press enter to continue battle, q to quit: ")
-        battleInput = readLine()!!
-        println(battleInput)
+    while (battleInput != "q") {
+        if (champion.health <= 0 || enemy.health <= 0) {
+            break
+        } else {
+            println(damageAssessment(champion, enemy, champion.dealDamage(), enemy.dealDamage()))
+            println("Press enter to continue battle, q to quit: ")
+            battleInput = readLine()!!
+        }
     }
 }

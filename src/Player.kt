@@ -1,6 +1,10 @@
 import kotlin.random.Random
 
-class Player (var name: String, var race: String) {
+val championClasses: Array<String> = arrayOf("paladin", "warrior", "rogue", "mage", "priest", "ranger")
+val enemyClasses: Array<String> = arrayOf("berserker", "warrior", "rogue", "warlock", "shaman", "hunter")
+
+@Suppress("IMPLICIT_CAST_TO_ANY")
+class Player (var name: String, var race: String, var chosenClass: String) {
     var faction = when (race) {
         "Dwarf" -> "Guardians of the Mountains"
         "Gnome" -> "Tinkerers in the Mines"
@@ -10,6 +14,16 @@ class Player (var name: String, var race: String) {
         "Goblin" -> "Creatures in the Mines"
         "Dark elf" -> "Creatures of the Forest"
         else -> "Unknown Race"
+    }
+    var availableClasses: Array<String> = when (race) {
+        "Dwarf" -> arrayOf(championClasses[0], championClasses[1])
+        "Gnome" -> arrayOf(championClasses[2], championClasses[3], championClasses[4])
+        "Human" -> arrayOf(championClasses[1], championClasses[3], championClasses[4])
+        "Elf" -> arrayOf(championClasses[1], championClasses[3], championClasses[5])
+        "Orc" -> arrayOf(enemyClasses[0], enemyClasses[1], enemyClasses[4])
+        "Goblin" -> arrayOf(enemyClasses[2], enemyClasses[3])
+        "Dark elf" -> arrayOf(enemyClasses[1], enemyClasses[2], enemyClasses[5])
+        else -> arrayOf("Some Class")
     }
     var health = when (this.race) {
         "Dwarf", "Orc" -> 120
